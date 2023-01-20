@@ -65,9 +65,7 @@ def apply_transform(image, transform):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    path = 'D:\\Dropbox\\RF_Warwick\\Projects\\HIMICO\\Dataset\\leuven\\single_cell_tumour_ihc_batch1\\single_thumbnails_level6'
-    image = imread(os.path.join(path, 'B-1986096_B4_CDX2p_MUC2y_MUC5g_CD8dab.png'))
-    fixed_image = image[500:1000, 300:800, 0]
+    fixed_image = imread('fixed_img.png')
 
     transform_matrix = np.array([[1, 0, -5], [0, 1, 5], [0, 0, 1]]).astype(float)
     moving_image = cv2.warpAffine(fixed_image, transform_matrix[0:-1], fixed_image.shape[:2][::-1])

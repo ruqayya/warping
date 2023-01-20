@@ -6,6 +6,7 @@ import itertools
 from numpy.linalg import inv
 import cv2
 
+
 def get_patch_dimensions(canvas_size, transform):
     N = canvas_size[0]
     x = [np.linspace(1, canvas_size[0], N, endpoint=True), np.ones(canvas_size[1]) * canvas_size[0],
@@ -56,9 +57,7 @@ def apply_transform(image, transform):
 
 
 if __name__ == '__main__':
-    path = 'D:\\Dropbox\\RF_Warwick\\Projects\\HIMICO\\Dataset\\leuven\\single_cell_tumour_ihc_batch1\\single_thumbnails_level6'
-    image = imread(os.path.join(path, 'B-1986096_B4_CDX2p_MUC2y_MUC5g_CD8dab.png'))
-    fixed_image = image[500:1000, 300:800, 0]
+    fixed_image = imread('fixed_img.png')
 
     transform_matrix_90 = np.array([[0, 1, 0], [-1, 0, 0], [0, 0, 1]]).astype(float)
     # rotation_matrix_45 = np.array([[0.7071, 0.7071, 0], [-0.7071, 0.7071, 0], [0, 0, 1]]).astype(float)
