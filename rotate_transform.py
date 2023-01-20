@@ -68,12 +68,12 @@ if __name__ == '__main__':
     transform_matrix = translation_matrix @ transform_matrix
     moving_image = cv2.warpAffine(fixed_image, transform_matrix[0:-1], fixed_image.shape[:2][::-1])
 
-    _, axs = plt.subplots(1, 2, figsize=(15, 10))
-    axs[0].imshow(fixed_image, cmap='gray')
-    axs[0].set_title("Fixed Image")
-    axs[1].imshow(moving_image, cmap='gray')
-    axs[1].set_title("Moving Image")
-    plt.show()
+    # _, axs = plt.subplots(1, 2, figsize=(15, 10))
+    # axs[0].imshow(fixed_image, cmap='gray')
+    # axs[0].set_title("Fixed Image")
+    # axs[1].imshow(moving_image, cmap='gray')
+    # axs[1].set_title("Moving Image")
+    # plt.show()
 
     transformed_image = apply_transform(moving_image, inv(transform_matrix)).astype(int)
 
