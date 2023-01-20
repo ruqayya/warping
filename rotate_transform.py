@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import itertools
 from numpy.linalg import inv
 import cv2
+import time
 
 
 def get_patch_dimensions(canvas_size, transform):
@@ -75,7 +76,11 @@ if __name__ == '__main__':
     # axs[1].set_title("Moving Image")
     # plt.show()
 
+    start_time = time.time()
     transformed_image = apply_transform(moving_image, inv(transform_matrix)).astype(int)
+    end_time = time.time()
+    total_time = end_time -start_time
+    print('Time taken %0.2f seconds'%(total_time))
 
     registered_overlay = np.dstack((transformed_image, fixed_image, transformed_image))
     _, axs = plt.subplots(1, 3, figsize=(15, 10))
