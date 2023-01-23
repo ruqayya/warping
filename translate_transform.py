@@ -7,60 +7,7 @@ import itertools
 from numpy.linalg import inv
 import cv2
 import time
-def get_patch_dimensions(canvas_size, transform):
-    N = canvas_size[0]
-    x = [np.linspace(1, canvas_size[0], N, endpoint=True), np.ones(canvas_size[1]) * canvas_size[0],
-         np.linspace(1, canvas_size[0], N, endpoint=True), np.ones(canvas_size[1])]
-    x = np.array(list(itertools.chain.from_iterable(x))) - 1
-
-    N = canvas_size[1]
-    y = [np.ones(canvas_size[0]), np.linspace(1, canvas_size[1], N, endpoint=True),
-         np.ones(canvas_size[0]) * canvas_size[1], np.linspace(1, canvas_size[1], N, endpoint=True)]
-    y = np.array(list(itertools.chain.from_iterable(y))) - 1
-
-    points = np.array([x, y]).transpose()
-    transformed_points = transform_points(points, transform)
-
-    width = int(np.max([np.max(transformed_points[:, 0]) + 1, canvas_size[1]]))
-    height = int(np.max([np.max(transformed_points[:, 1]) + 1, canvas_size[0]]))
-    return [height, width]
-
-
-def transform_points(points, matrix):
-	pts_pad = np.hstack([points, np.ones((points.shape[0], 1))])
-	points_warp = np.dot(pts_pad, matrix.T)
-	return points_warp[:, :-1]
-
-
-def apply_transform(image, transform):
-    inv_transform = inv(transform)
-    new_image_shape = get_patch_dimensions([image.shape[1], image.shape[0]], inv_transform)
-    new_image = np.zeros(new_image_shape)
-    for iRow in range(image.shape[0]):
-        for iCol in range(image.shape[1]):
-            coord = np.array([[iCol, iRow]])
-            transform_coord = transform_points(coord, inv_transform)
-            if (not (transform_coord < 0).any()) and (transform_coord[0, 0] < image.shape[1]) and (transform_coord[0, 1] < image.shape[0]):
-                new_image[iRow, iCol] = image[int(transform_coord[0, 1]), int(transform_coord[0, 0])]
-                # new_image[int(transform_coord[0, 1]), int(transform_coord[0, 0])] = image[iRow, iCol]
-
-    # crop the transformed_image
-    # image_centre = np.array([image.shape[1]/2, image.shape[0]/2])
-    # image_centre = np.expand_dims(image_centre, axis=0)
-    # transform_image_centre = transform_points(image_centre, transform)
-    # new_start_row, new_start_col = int(transform_image_centre[0, 1] - image.shape[0]/2), int(transform_image_centre[0, 0] - image.shape[1]/2)
-    # image_start = np.array([[0, 0]])
-    # transform_image_start = transform_points(image_start, transform).astype(int)
-    transformed_image = new_image[0:image.shape[0], 0:image.shape[1]]
-
-    _, axs = plt.subplots(1, 2, figsize=(15, 10))
-    axs[0].imshow(image)
-    axs[0].set_title("Input Image")
-    axs[1].imshow(transformed_image)
-    axs[1].set_title("Transformed Image")
-    plt.show()
-    print('hello')
-    return transformed_image
+import utils
 
 
 # Press the green button in the gutter to run the script.
@@ -78,7 +25,7 @@ if __name__ == '__main__':
     # plt.show()
 
     start_time = time.time()
-    transformed_image = apply_transform(moving_image, inv(transform_matrix)).astype(int)
+    transformed_image = utils.apply_transform(moving_image, inv(transform_matrix)).astype(int)
     end_time = time.time()
     total_time = end_time -start_time
     print('Time taken %0.2f seconds'%(total_time))
